@@ -4,7 +4,7 @@
 
 ## How to run
 
-Install:
+### Install
 
 ```shell
 poetry install
@@ -12,7 +12,7 @@ poetry shell
 python src/main.py
 ```
 
-Run:
+### Run
 
 ```shell
 python src/main.py
