@@ -1,6 +1,6 @@
 import pytest
 
-from src.repositories import UserRepository
+from src.data_access.user_repository import UserRepository
 
 
 @pytest.fixture

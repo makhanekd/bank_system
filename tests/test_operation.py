@@ -1,6 +1,6 @@
 import pytest
 
-from src.repositories import BankOperationRepository
+from src.data_access.bank_repository import BankOperationRepository
 
 
 @pytest.fixture

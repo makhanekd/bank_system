@@ -1,34 +1,14 @@
 from dataclasses import dataclass
-from enum import Enum
-
-
-class OperationType(Enum):
-    TOPUP = 'topup'
-    WITHDRAW = 'withdraw'
-
-
-@dataclass(frozen=True)
-class User:
-    id: int
-    username: str
-    password: str
-
-    @property
-    def check_min_length_password(self):
-        return len(self.password) >= 8
-
-    @property
-    def check_min_length_username(self):
-        return len(self.username) >= 3
+from typing import Any
 
 
 @dataclass
-class BankOperation:
-    user_id: int
-    amount: float
-    operation_type: OperationType
-    operation_at: str
+class Session:
+    is_active: bool = True
+    is_authicated: bool = False
+    user_id: int = -1
 
-    @property
-    def check_amount(self):
-        return self.amount > 0
+    def __setattr__(self, name: str, value: Any) -> None:
+        if name == 'user_id':
+            self.is_authicated = value > -1
+        super().__setattr__(name, value)

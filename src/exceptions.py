@@ -1,3 +1,6 @@
+from termcolor import colored
+
+
 class BaseException(ValueError):
     pass
 
@@ -7,6 +10,6 @@ def handler_exception(func):
         try:
             return func(*args, **kwargs)
         except BaseException as e:
-            print(e)
+            print(colored(e, 'red'))
 
     return wrapper
