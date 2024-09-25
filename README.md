@@ -26,6 +26,6 @@ python -m src.main
 ## How to test
 
 ```shell
-poetyr shell
+poetry shell
 pytest
 ```
