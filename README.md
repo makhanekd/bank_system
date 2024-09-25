@@ -9,7 +9,6 @@
 ```shell
 poetry install
 poetry shell
-python src/main.py
 ```
 
 ### Run
