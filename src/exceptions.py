@@ -1,7 +1,7 @@
 from termcolor import colored
 
 
-class BaseException(ValueError):
+class ApplicationException(Exception):
     pass
 
 
@@ -9,7 +9,7 @@ def handler_exception(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except BaseException as e:
+        except ApplicationException as e:
             print(colored(e, 'red'))
 
     return wrapper

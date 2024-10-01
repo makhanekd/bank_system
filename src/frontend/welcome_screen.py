@@ -37,6 +37,8 @@ class WelcomeScreen(BaseScreen):
         response = self.user_controller.register(username, password)
         if response.is_success and response.data:
             self._print_success(f'\nПользователь зарегистрирован, {response.data.username}!')
+        else:
+            self._print_error(f'\n{response.message}')
 
     def _authenticate_screen(self):
         username = self._input_str('\nВведите логин: ')
@@ -51,3 +53,5 @@ class WelcomeScreen(BaseScreen):
             user = response.data
             self.session.user_id = user.id
             self._print_success(f'\nАвторизация успешна, {user.username}!')
+        else:
+            self._print_error(f'\n{response.message}')

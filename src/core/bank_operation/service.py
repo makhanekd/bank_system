@@ -1,6 +1,5 @@
-from src.core.bank_operation import BankOperation
-from src.exceptions import handler_exception
-
+from .entities import BankOperation, BankOperationInputDTO, OperationType
+from .exceptions import BaseBankException
 from .repository import IBankOperationRepository
 
 
@@ -8,18 +7,32 @@ class BankService:
     def __init__(self, bank_repo: IBankOperationRepository):
         self.bank_repo = bank_repo
 
-    @handler_exception
-    def topup(self, user_id: int, amount: int) -> BankOperation:
-        return self.bank_repo.topup(user_id, amount)
+    def topup(self, user_id: int, amount: int) -> tuple[BankOperation | None, BaseBankException | None]:
+        operation = BankOperationInputDTO(user_id, amount, OperationType.TOPUP)
 
-    @handler_exception
-    def withdraw(self, user_id: int, amount: int) -> BankOperation:
-        return self.bank_repo.withdraw(user_id, amount)
+        if not operation.check_amount:
+            return None, BaseBankException('Сумма должна быть больше нуля!!!')
 
-    @handler_exception
-    def balance(self, user_id: int) -> int:
-        return self.bank_repo.balance(user_id)
+        return self.bank_repo.topup(operation)
 
-    @handler_exception
-    def get_by_user_id(self, user_id: int) -> list[BankOperation]:
-        return self.bank_repo.get_by_user_id(user_id)
+    def withdraw(self, user_id: int, amount: int) -> tuple[BankOperation | None, BaseBankException | None]:
+        operation = BankOperationInputDTO(user_id, amount, OperationType.WITHDRAW)
+
+        if not operation.check_amount:
+            return None, BaseBankException('Сумма должна быть больше нуля!!!')
+
+        balance, error = self.get_balance_by_user_id(user_id)
+
+        if error or not balance:
+            return None, error
+
+        if balance < amount:
+            return None, BaseBankException('Недостаточно средств!!!')
+
+        return self.bank_repo.withdraw(operation)
+
+    def get_balance_by_user_id(self, user_id: int) -> tuple[int | None, BaseBankException | None]:
+        return self.bank_repo.get_balance(user_id)
+
+    def get_operations_by_user_id(self, user_id: int) -> tuple[list[BankOperation] | None, BaseBankException | None]:
+        return self.bank_repo.get_operations_by_user_id(user_id)

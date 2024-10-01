@@ -2,8 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class User:
-    id: int
+class UserInputDTO:
     username: str
     password: str
 
@@ -14,3 +13,10 @@ class User:
     @property
     def check_min_length_username(self):
         return len(self.username) >= 3
+
+
+@dataclass(frozen=True)
+class User:
+    id: int
+    username: str
+    password: str

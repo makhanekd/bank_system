@@ -1,21 +1,22 @@
 from abc import ABC, abstractmethod
 
-from .entities import BankOperation
+from .entities import BankOperation, BankOperationInputDTO
+from .exceptions import BaseBankException
 
 
 class IBankOperationRepository(ABC):
     @abstractmethod
-    def topup(self, user_id: int, amount: int) -> BankOperation:
+    def topup(self, operation: BankOperationInputDTO) -> tuple[BankOperation | None, BaseBankException | None]:
         raise NotImplementedError
 
     @abstractmethod
-    def withdraw(self, user_id: int, amount: int) -> BankOperation:
+    def withdraw(self, operation: BankOperationInputDTO) -> tuple[BankOperation | None, BaseBankException | None]:
         raise NotImplementedError
 
     @abstractmethod
-    def balance(self, user_id: int) -> int:
+    def get_balance(self, user_id: int) -> tuple[int | None, BaseBankException | None]:
         raise NotImplementedError
 
     @abstractmethod
-    def get_by_user_id(self, user_id: int) -> list[BankOperation]:
+    def get_operations_by_user_id(self, user_id: int) -> tuple[list[BankOperation] | None, BaseBankException | None]:
         raise NotImplementedError

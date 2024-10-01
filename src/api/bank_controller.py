@@ -13,23 +13,33 @@ class BankController:
         self.service = bank_service_fabric()
 
     def topup(self, user_id: int, amount: int) -> Response:
-        operation = self.service.topup(user_id, amount)
-        if not operation:
-            return ErrorResponse('Ошибка при пополнении счета')
+        operation, error = self.service.topup(user_id, amount)
+
+        if error:
+            return ErrorResponse(f'Ошибка при пополнении счета {error}')
+
         return SuccessResponse(f'Счет пополнен на {amount}', operation)
 
     def withdraw(self, user_id: int, amount: int) -> Response:
-        operation = self.service.withdraw(user_id, amount)
-        if not operation:
-            return ErrorResponse('Ошибка при пополнении счета')
+        operation, error = self.service.withdraw(user_id, amount)
+
+        if error:
+            return ErrorResponse(f'Ошибка при пополнении счета {error}')
+
         return SuccessResponse(f'Счет списан на {amount}', operation)
 
     def get_balance(self, user_id: int) -> Response:
-        balance = self.service.balance(user_id)
+        balance, error = self.service.get_balance_by_user_id(user_id)
+
+        if error:
+            return ErrorResponse(str(error))
 
         return SuccessResponse(f'Баланс: {balance} руб.', balance)
 
     def get_history(self, user_id: int) -> Response:
-        history = self.service.get_by_user_id(user_id)
+        history, error = self.service.get_operations_by_user_id(user_id)
+
+        if error:
+            return ErrorResponse(str(error))
 
         return SuccessResponse('История операций:', history)
