@@ -1,11 +1,12 @@
 from src.core.bank_operation import BankService
-from src.data_access import BankOperationRepository
+from src.providers import container_factory
 
 from .response import ErrorResponse, Response, SuccessResponse
 
 
 def bank_service_fabric():
-    return BankService(BankOperationRepository())
+    with container_factory() as container:
+        return container.get(BankService)
 
 
 class BankController:

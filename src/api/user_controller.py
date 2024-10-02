@@ -1,11 +1,12 @@
 from src.core.user import UserInputDTO, UserService
-from src.data_access import UserRepository
+from src.providers import container_factory
 
 from .response import ErrorResponse, Response, SuccessResponse
 
 
 def user_service_fabric():
-    return UserService(UserRepository())
+    with container_factory() as container:
+        return container.get(UserService)
 
 
 class UserController:
